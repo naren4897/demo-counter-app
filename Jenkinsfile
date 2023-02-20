@@ -59,14 +59,15 @@ pipeline{
                 }
             }
         }
-    }
-    stage('Docker Image Build'){
-        steps{
-            script{
-                sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-                sh 'docker image tag $JOB_NAME:v1.$BUILD_ID naren4897/$JOB_NAME:v1.$BUILD_ID'
-                sh 'docker image tag $JOB_NAME:v1.$BUILD_ID naren4897/$JOB_NAME:latest'
+        stage('Docker Image Build'){
+            steps{
+                script{
+                    sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID naren4897/$JOB_NAME:v1.$BUILD_ID'
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID naren4897/$JOB_NAME:latest'
+                }
             }
         }
     }
+    
 }

@@ -68,6 +68,19 @@ pipeline{
                 }
             }
         }
+        stage('push image to DockerHub'){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'dockercreds', variable: 'docker_hub_cred')]) {
+
+                    sh 'docker login -u naren4897 -p ${docker_hub_cred}'
+                    sh 'docker image push naren4897/$JOB_NAME:v1.$BUILD_ID'
+                    sh 'docker image push naren4897/$JOB_NAME:latest'
+                    }
+
+                }
+            }
+        }
     }
     
 }

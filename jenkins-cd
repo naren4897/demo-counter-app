@@ -2,8 +2,8 @@ pipeline{
     agent any
     parameters{
         choice(name: 'action', choices: 'create\ndestroy\ndestroyekscluster', description: 'Create/Update or destroy the eks cluster')
-        string(name: 'cluster' , defaultvalue:'demo-cluster', description: 'Eks cluster name')
-        string(name: 'region' , defaultvalue:'ap-south-1', description: 'Eks cluster region')
+        string(name: 'cluster' , defaultvalue: 'demo-cluster', description: 'Eks cluster name')
+        string(name: 'region' , defaultvalue: 'ap-south-1', description: 'Eks cluster region')
     }
     environment{
         ACCESS_KEY = credentials('aws_access_key_id')

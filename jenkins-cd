@@ -29,51 +29,52 @@ pipeline{
                     aws eks --region ${params.region} update-kubeconfig --name ${params.cluster}
                         """;
             }
-        }
-        stage('eks deployment'){
-            when{ expression{params.action == 'create'}}
-            steps{
-                script{
-                    def apply = false
-                    try {
-                        input message: 'please confirm the apply to initiate the deployments', ok:'apply the config'
-                        apply = true
+            stage('eks deployments'){
+                when { expression { params.action == 'create' } }
+                steps{
+                    script{
+                        def apply = false
+                        try {
+                            input message: 'please confirm the apply to initiate the deployments', ok:'apply the config'
+                            apply = true
+                        }
+                         catch (err) {
+                            apply = false
+                            CurrentBuild.result= 'UNSTABLE'
+                        }
+                        if(apply){
+                            sh """
+                                kubectl apply -f .
+                                    """;
+                            
+                        }
                     }
-                     catch (err) {
-                        apply = false
-                        CurrentBuild.result= 'UNSTABLE'
-                    }
-                    if(apply){
-                        sh """
-                            kubectl apply -f .
-                                """;
-                        
-                    }
+                    
                 }
-                
             }
+            // stage('Delete deployment'){
+            //     when{ expression{params.action == 'destroy'}}
+            //     steps{
+            //         script{
+            //             def destroy = false
+            //             try {
+            //                 input message: 'please confirm the destroy to delet the deployments', ok:'Ready to destroy the config'
+            //                 destroy = true
+            //             } catch (err) {
+            //                 destroy = false
+            //                 CurrentBuild.result= 'UNSTABLE'
+            //             }
+            //             if(destroy){
+            //                 sh """
+            //                         kubectl delete -f .
+            //                         """;
+                            
+            //             }
+            //         }
+                    
+            //     }
+            // }
         }
-        // stage('Delete deployment'){
-        //     when{ expression{params.action == 'destroy'}}
-        //     steps{
-        //         script{
-        //             def destroy = false
-        //             try {
-        //                 input message: 'please confirm the destroy to delet the deployments', ok:'Ready to destroy the config'
-        //                 destroy = true
-        //             } catch (err) {
-        //                 destroy = false
-        //                 CurrentBuild.result= 'UNSTABLE'
-        //             }
-        //             if(destroy){
-        //                 sh """
-        //                         kubectl delete -f .
-        //                         """;
-                        
-        //             }
-        //         }
-                
-        //     }
-        // }
+        
     }
 }
